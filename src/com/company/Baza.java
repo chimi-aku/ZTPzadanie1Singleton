@@ -1,11 +1,21 @@
 package com.company;
 
 class Baza {
-    private Baza(){
-    }
+
 
     private char[] tab = new char[100]; /* ... */
+    private Baza(){
+    }
+    private static Baza baza = new Baza();
 
+    public static Baza getBaza() {
+        if(baza != null) {
+            synchronized (Baza.class) {
+                if(baza != null) baza = new Baza();
+            }
+        }
+        return baza;
+    }
 
     public static IPolaczenie getPolaczenie() {
         return Polaczenie.getInstance();
@@ -13,7 +23,7 @@ class Baza {
 
     private static class Polaczenie implements IPolaczenie {
 
-        private static Baza baza = new Baza(); /* ... */
+        private static Baza baza =  getBaza();/* ... */
         private static Polaczenie[] polaczenia = new Polaczenie[]{new Polaczenie(), new Polaczenie(), new Polaczenie()};
 
         static int i = 0;
